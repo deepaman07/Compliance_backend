@@ -1,14 +1,21 @@
 
-var mysql=require('mysql');
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "T0day@1234",
-    database: 'PbmcApi'
-  });
-  
-  con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
-module.exports=con;
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize(
+  'PBMC_Api',
+  'root',
+  'T0day@1234',
+    {
+      host: 'localhost',
+      dialect: 'mysql',
+      define: {
+        timestamps: false,
+        freezeTableName: true
+    }
+    }
+  );
+sequelize.authenticate().then(() => {
+  console.log('Connection has been established successfully.');
+}).catch((error) => {
+  console.error('Unable to connect to the database: ', error);
+});
+module.exports=sequelize;

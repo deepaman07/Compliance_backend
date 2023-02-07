@@ -1,0 +1,53 @@
+CREATE DATABASE PBMC;
+use PBMC;
+
+CREATE TABLE `BasicInfo` (
+  ID int NOT NULL AUTO_INCREMENT,
+  Username varchar(30) NOT NULL,
+  FatherName varchar(30) NOT NULL,
+  MobileNumber varchar(10) NOT NULL,
+  EmailId varchar(30) NOT NULL,
+  PanNumber varchar(10) NOT NULL,
+  DOB date NOT NULL,
+  Address varchar(50) NOT NULL,
+  Pincode varchar(6) NOT NULL,
+  State varchar(20) NOT NULL,
+  City varchar(20) NOT NULL,
+  GSTNumber tinyint NOT NULL,
+  MSMENumber tinyint NOT NULL,
+  PRIMARY KEY (`ID`)
+);
+
+INSERT INTO `BasicInfo` (Username, FatherName, MobileNumber, EmailId, PanNumber, DOB, Address, Pincode, State, City, GSTNumber, MSMENumber) VALUES ('Ramesh',resh', 9911991199, 'ramesh@gmail.com', 'CDPJ8398','2000-08-11','504, dwarka sec - 18, new delhi', 234566, 'Delhi', 'Delhi', 1, 1);
+
+CREATE TABLE `bankinfo` (
+  ID int NOT NULL AUTO_INCREMENT,   
+  BankName varchar(20) NOT NULL,   
+  AccountHolderName varchar(30) NOT NULL,   
+  AccountNumber varchar(20) NOT NULL,   
+  IfscCode varchar(10) NOT NULL,   
+  PanNumber varchar(10) NOT NULL,   
+  Pincode varchar(6) NOT NULL,   
+  BranchState varchar(30) NOT NULL,   
+  BranchAddress varchar(50) NOT NULL,   
+PRIMARY KEY (`ID`)
+);
+
+INSERT INTO `bankinfo` (BankName, AccountHolderName, AccountNumber, IfscCode, PanNumber, Pincode, BranchState, BranchAddress) VALUES ('HDFC','Suresh', 55001111005555', 'HDFC2424', 'CAPJ8448', '112211', 'Delhi', 'nehru place, sec-12, Delhi');
+
+CREATE TABLE `kycinfo` (
+  ID int NOT NULL auto_increment,
+  PanCard varchar(50) NOT NULL,
+  CancelCheque varchar(50) NOT NULL,
+  AddressProof varchar(50) NOT NULL,
+  HighestEducation varchar(50) NOT NULL,
+  PartnerPhoto varchar(50) NOT NULL,
+  MSMECertificate varchar(50) NOT NULL,
+  GSTCertificate varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+);
+
+INSERT INTO `Kycinfo` (PanCard, CancelCheque, AddressProof, HighestEducation, PartnerPhoto, MSMECertificate, GSTCertificate) values ("https://www.pbpartners.com/img/favicon.ico?v=1", "https://www.pbpartners.com/img/favicon.ico?v=1", "https://www.pbpartners.com/img/favicon.ico?v=1", "https://www.pbpartners.com/img/favicon.ico?v=1", "https://www.pbpartners.com/img/favicon.ico?v=1", "https://www.pbpartners.com/img/favicon.ico?v=1", "https://www.pbpartners.com/img/favicon.ico?v=1");
+-- select * from basicinfo;
+-- select * from bankinfo;
+-- select * from kycinfo;
