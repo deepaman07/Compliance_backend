@@ -1,137 +1,164 @@
 const db = require("../../db");
-const Sequelize=require("sequelize")
-const CustomerDetails ={
-
-  BasicInfo:db.define("BasicInfo",{
+const Sequelize = require("sequelize");
+const CustomerDetails = {
+  BasicInfo: db.define("BasicInfo", {
     ID: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     Username: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     FatherName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     MobileNumber: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     EmailId: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     PanNumber: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     DOB: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.DATE,
+      allowNull: false,
     },
     Address: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     Pincode: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     State: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     City: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     GSTNumber: {
       type: Sequelize.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     MSMENumber: {
       type: Sequelize.INTEGER,
-      allowNull: false
+      allowNull: false,
+    },
+    IsActive: {
+      type: Sequelize.INTEGER,
+      allowNull:false
+    },
+    CreatedOn: {
+      type: Sequelize.STRING,
+    },
+    UpdatedOn: {
+      type: Sequelize.STRING
     }
   }),
-  bankinfo:db.define("bankinfo",{
+  bankinfo: db.define("bankinfo", {
     ID: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     BankName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     AccountHolderName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     AccountNumber: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     IfscCode: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     PanNumber: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     Pincode: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     BranchState: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     BranchAddress: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+    },
+    IsActive: {
+      type: Sequelize.INTEGER,
+      allowNull:false
+    },
+    CreatedOn: {
+      type: Sequelize.STRING,
+    },
+    UpdatedOn: {
+      type: Sequelize.STRING
     }
   }),
-  kycinfo:db.define("kycinfo",{
+  kycinfo: db.define("kycinfo", {
     ID: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     PanCard: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     CancelCheque: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     AddressProof: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     HighestEducation: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     PartnerPhoto: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     MSMECertificate: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     GSTCertificate: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+    },
+    IsActive: {
+      type: Sequelize.INTEGER,
+      allowNull:false
+    },
+    CreatedOn: {
+      type: Sequelize.STRING,
+    },
+    UpdatedOn: {
+      type: Sequelize.STRING
     }
-  })
-
-
+  }),
 };
-module.exports=CustomerDetails;
+module.exports = CustomerDetails;
