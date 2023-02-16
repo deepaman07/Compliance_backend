@@ -10,7 +10,7 @@ var otpController = {
     //   lowerCaseAlphabets: false,
     //   specialChars: false,
     // });
-    const otp=101010
+    const otp = 101010;
     localStorage.setItem("mobileNo", mobileNo);
     localStorage.setItem("otp", otp);
     localStorage.setItem("generatedTime", generatedTime);
@@ -18,6 +18,7 @@ var otpController = {
       otp: otp,
     });
   },
+  
   OtpVerification: async function (req, res, next) {
     const mobileNumber = Number(localStorage.getItem("mobileNo"));
     const otp = Number(localStorage.getItem("otp"));
