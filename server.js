@@ -1,17 +1,28 @@
-const http=require('http');
 const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+const PORT = process.env.PORT;
 const app = express();
-const dotenv = require('dotenv');
-dotenv.config();
-const CustomerDetails=require("./api/routes/CustomerDetails");
-const otp = require("./api/routes/otp");
-const userToken = require("./api/routes/tokenRouter");
+
+// Middleware
 app.use(express.json());
-//routes
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
+// Importing Routers
+const otp = require("./api/otp");
+const customerDetails = require("./api/CustomerDetails");
+const userToken = require("./api/tokenRouter");
+const states = require("./api/StateRouter");
+const products = require("./api/ProductRouter");
+
+// Routers connections
 app.use("/otp", otp);
-app.use("/CustomerDetails", CustomerDetails);
-app.use("/userToken", userToken);
-// creating the server
-const server=http.createServer(app);
-const port=process.env.PORT || process.env.PORT
-server.listen(port);
+app.use("/details", customerDetails);
+app.use("/api", userToken);
+app.use("/geo", states);
+app.use("/product", products);
+
+app.listen(PORT, () => {
+  console.log(`SERVER IS RUNNING ON PORT - ${PORT}`);
+});

@@ -1,14 +1,19 @@
-var CustomerDetailsSchema = require("../models/mysql/CustomerDetailsSchema");
+const CustomerDetailsSchema = require("../models/");
 const axios = require("axios");
 const multer = require("multer");
 const util = require("util");
 const path = require("path");
 const fs = require("fs");
-var folderPath;
+require("dotenv").config();
+
+const BasicInfo = CustomerDetailsSchema.customerDetails.BasicInfo;
+const BankInfo = CustomerDetailsSchema.customerDetails.BankInfo;
+const KycInfo = CustomerDetailsSchema.customerDetails.KycInfo;
+
 // Set storage engine for Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    folderPath = `./KycDocs/${req.body.ID}`;
+    const folderPath = `./KycDocs/${req.body.CustomerID}`;
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
     }
@@ -40,7 +45,7 @@ const fileFilter = (req, file, cb) => {
 
 // Initialize upload variable with storage engine and file filter
 const upload = multer({ storage: storage, fileFilter: fileFilter }).fields([
-  { name: "Pancard", maxCount: 1 },
+  { name: "PanCard", maxCount: 1 },
   { name: "CancelCheque", maxCount: 1 },
   { name: "AddressProof", maxCount: 1 },
   { name: "HighestEducation", maxCount: 1 },
@@ -49,119 +54,112 @@ const upload = multer({ storage: storage, fileFilter: fileFilter }).fields([
   { name: "GSTCertificate", maxCount: 1 },
 ]);
 
-var CustomerDetails = {
-  BasicInfo: async function (req, res, next) {
-    var BasicInfoSchema = CustomerDetailsSchema.BasicInfo;
+const CustomerDetails = {
+  ReadBasicInfo: async function (req, res, next) {
+    // Creating entries using info json object
 
-    //Insert into table BasicInfo
-    if (req.body.ID == null) {
-      BasicInfoSchema.create({
-        ID: req.body.ID,
-        Username: req.body.Username,
-        FatherName: req.body.FatherName,
-        MobileNumber: req.body.MobileNumber,
-        EmailId: req.body.EmailId,
-        PanNumber: req.body.PanNumber,
-        DOB: req.body.DOB,
-        Address: req.body.Address,
-        Pincode: req.body.Pincode,
-        State: req.body.State,
-        City: req.body.City,
-        GSTNumber: req.body.GSTNumber,
-        MSMENumber: req.body.MSMENumber,
-        IsActive: 1,
-      }).then(function (result) {
-        if (result) {
-          res.status(200).json({
-            msg: result,
-            ID: result.dataValues.ID ? result.dataValues.ID : 0,
-          });
-        } else {
-          res.status(400).send("Error in insert new record");
-        }
-      });
+    const users = await BasicInfo.findAll({
+      attributes: ["ID", "Username", "MobileNumber", "EmailId"],
+    });
+    if (users) {
+      res.status(200).json(users);
     } else {
-      // Update table BasicInfo
-      BasicInfoSchema.update(
-        {
-          ID: req.body.ID,
-          Username: req.body.Username,
-          FatherName: req.body.FatherName,
-          MobileNumber: req.body.MobileNumber,
-          EmailId: req.body.EmailId,
-          PanNumber: req.body.PanNumber,
-          DOB: req.body.DOB,
-          Address: req.body.Address,
-          Pincode: req.body.Pincode,
-          State: req.body.State,
-          City: req.body.City,
-          GSTNumber: req.body.GSTNumber,
-          MSMENumber: req.body.MSMENumber,
-          IsActive: 1,
-        },
-        { where: { ID: req.body.ID } }
-      )
-        .then((result) => {
-          console.log(result);
-          res.status(200).json({
-            msg: "update succesfull",
-            customerId: req.body.ID,
-            error: false,
-          });
-        })
-        .catch((err) => {
-          res.status(200).json({ msg: "updation failed", error: true });
-        });
+      res.status(400).send("Internal server error!");
     }
   },
+
+  CreateBasicInfo: async function (req, res, next) {
+    // Making json object to push the data for basic info
+    let customerBasicInfo = {
+      Username: req.body.Username,
+      FatherName: req.body.FatherName,
+      MobileNumber: req.body.MobileNumber,
+      EmailId: req.body.EmailId,
+      PanNumber: req.body.PanNumber,
+      DOB: req.body.DOB,
+      Address: req.body.Address,
+      Pincode: req.body.Pincode,
+      State: req.body.State,
+      City: req.body.City,
+      GSTNumber: req.body.GSTNumber,
+      MSMENumber: req.body.MSMENumber,
+    };
+
+    // Creating entries using info json object
+    const result = await BasicInfo.create(customerBasicInfo);
+
+    // Catching result and error message
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.status(400).send("Internal server error!");
+    }
+  },
+
+  UpdateBasicInfo: async function (req, res, next) {
+    let customerBasicInfo = {
+      Username: req.body.Username,
+      FatherName: req.body.FatherName,
+      MobileNumber: req.body.MobileNumber,
+      EmailId: req.body.EmailId,
+      PanNumber: req.body.PanNumber,
+      DOB: req.body.DOB,
+      Address: req.body.Address,
+      Pincode: req.body.Pincode,
+      State: req.body.State,
+      City: req.body.City,
+      GSTNumber: req.body.GSTNumber,
+      MSMENumber: req.body.MSMENumber,
+    };
+    BasicInfo.update(customerBasicInfo, { where: { ID: req.body.ID } })
+      .then((result) => {
+        console.log(result);
+        res.status(200).json({
+          msg: "update succesfull",
+          customerId: req.body.ID,
+          error: false,
+        });
+      })
+      .catch((err) => {
+        res.status(200).json({ msg: "updation failed", error: true });
+      });
+  },
   BankInfo: async function (req, res, next) {
-    var BankInfoSchema = CustomerDetailsSchema.bankinfo;
-    var x;
-    await BankInfoSchema.count({ where: { ID: req.body.ID } }).then((count) => {
-      if (count != 0) {
-        x = false;
-      } else {
-        x = true;
+    let customerBankInfo = {
+      CustomerID: req.body.CustomerID,
+      BankName: req.body.BankName,
+      AccountHolderName: req.body.AccountHolderName,
+      AccountNumber: req.body.AccountNumber,
+      IfscCode: req.body.IfscCode,
+      PanNumber: req.body.PanNumber,
+      Pincode: req.body.Pincode,
+      BranchState: req.body.BranchState,
+      BranchAddress: req.body.BranchAddress,
+    };
+    var isExist = 0;
+    await BankInfo.count({ where: { CustomerID: req.body.CustomerID } }).then(
+      (count) => {
+        if (count != 0) {
+          isExist = false;
+        } else {
+          isExist = true;
+        }
       }
-    });
-    if (x === true) {
+    );
+    if (isExist === true) {
       //Insert into table bankinfo
-      BankInfoSchema.create({
-        ID: req.body.ID,
-        BankName: req.body.BankName,
-        AccountHolderName: req.body.AccountHolderName,
-        AccountNumber: req.body.AccountNumber,
-        IfscCode: req.body.IfscCode,
-        PanNumber: req.body.PanNumber,
-        Pincode: req.body.Pincode,
-        BranchState: req.body.BranchState,
-        BranchAddress: req.body.BranchAddress,
-        IsActive: 1,
-      }).then(function (result) {
+      await BankInfo.create(customerBankInfo).then(function (result) {
         if (result) {
-          res.status(200).json({ msg: result });
+          res.status(200).json({ msg: res });
         } else {
           res.status(400).send("Error in insert new record");
         }
       });
     } else {
-      console.log("dupe........................dupe");
       //Insert into table bankinfo
-      BankInfoSchema.update(
-        {
-          ID: req.body.ID,
-          BankName: req.body.BankName,
-          AccountHolderName: req.body.AccountHolderName,
-          AccountNumber: req.body.AccountNumber,
-          IfscCode: req.body.IfscCode,
-          PanNumber: req.body.PanNumber,
-          Pincode: req.body.Pincode,
-          BranchState: req.body.BranchState,
-          BranchAddress: req.body.BranchAddress,
-          IsActive: 1,
-        },
-        { where: { ID: req.body.ID } }
-      ).then(function (result) {
+      BankInfo.update(customerBankInfo, {
+        where: { CustomerID: req.body.CustomerID },
+      }).then(function (result) {
         if (result) {
           res.status(200).json({"msg":"Update Succesfull",
           "result":result});
@@ -179,11 +177,11 @@ var CustomerDetails = {
       if (err) {
         return res.send(err);
       } else {
-        console.log(req.files.Pancard[0].filename);
-        var docLink = `${process.env.LOCALHOST}CustomerDetails/KycDocs/${req.body.ID}/`;
+        console.log(req.files.Pancard);
+        var docLink = `${process.env.LOCALHOST}details/kycinfo/${req.body.CustomerID}/`;
         const data = {
-          ID: Number(req.body.ID),
-          PanCard: docLink + req.files.Pancard[0].filename,
+          CustomerID: Number(req.body.CustomerID),
+          PanCard: docLink + req.files.PanCard[0].filename,
           CancelCheque: docLink + req.files.CancelCheque[0].filename,
           AddressProof: docLink + req.files.AddressProof[0].filename,
           HighestEducation: docLink + req.files.HighestEducation[0].filename,
@@ -193,63 +191,55 @@ var CustomerDetails = {
         };
         console.log(data);
         axios
-          .post(`${process.env.LOCALHOST}CustomerDetails/KycInfo`, data)
+          .post(`${process.env.LOCALHOST}details/kycinfo`, data)
           // Print data
           .then((response) => {
-            res.status(200).send({ msg: "saved successfully" });
-          })
-          // Print error message if occur
-          .catch((error) => console.log("Error to fetch data\n" + error));
-        return res;
+            if (response) {
+              res.status(200).send({ msg: "saved successfully" });
+            } else {
+              res.status(400).send("Error to fetch data\n" + error);
+            }
+          });
       }
     });
   },
   KycInfo: async function (req, res, next) {
-    var KycInfoSchema = CustomerDetailsSchema.kycinfo;
-    var x;
-    await KycInfoSchema.count({ where: { ID: req.body.ID } }).then((count) => {
-      if (count != 0) {
-        x = false;
-      } else {
-        x = true;
+    // Making json object to push the data for kyc info
+    var isExist;
+    await KycInfo.count({ where: { CustomerID: req.body.CustomerID } }).then(
+      (count) => {
+        if (count != 0) {
+          isExist = false;
+          // res.status(200).send(isExist);
+        } else {
+          isExist = true;
+          // res.status(200).send(isExist);
+        }
       }
-    });
-    if (x === true) {
-      //Insert into table kycinfo
-      KycInfoSchema.create({
-        ID: req.body.ID,
-        PanCard: req.body.PanCard,
-        CancelCheque: req.body.CancelCheque,
-        AddressProof: req.body.AddressProof,
-        HighestEducation: req.body.HighestEducation,
-        PartnerPhoto: req.body.PartnerPhoto,
-        MSMECertificate: req.body.MSMECertificate,
-        GSTCertificate: req.body.GSTCertificate,
-        IsActive: 1,
+    );
+    let customerKycInfo = {
+      CustomerID: req.body.CustomerID,
+      PanCard: req.body.PanCard,
+      CancelCheque: req.body.CancelCheque,
+      AddressProof: req.body.AddressProof,
+      HighestEducation: req.body.HighestEducation,
+      PartnerPhoto: req.body.PartnerPhoto,
+      MSMECertificate: req.body.MSMECertificate,
+      GSTCertificate: req.body.GSTCertificate,
+    };
+    if (isExist === true) {
+      const result = await KycInfo.create(customerKycInfo);
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(400).send("Internal server error!");
+      }
+    } else {
+      KycInfo.update(customerKycInfo, {
+        where: { CustomerID: req.body.CustomerID },
       }).then(function (result) {
         const obj = { result };
         const str = util.inspect(obj);
-        if (result) {
-          res.status(200).send(str);
-        } else {
-          res.status(400).send("Error in insert new record");
-        }
-      });
-    } else {
-      KycInfoSchema.update(
-        {
-          ID: req.body.ID,
-          PanCard: req.body.PanCard,
-          CancelCheque: req.body.CancelCheque,
-          AddressProof: req.body.AddressProof,
-          HighestEducation: req.body.HighestEducation,
-          PartnerPhoto: req.body.PartnerPhoto,
-          MSMECertificate: req.body.MSMECertificate,
-          GSTCertificate: req.body.GSTCertificate,
-          IsActive: 1,
-        },
-        { where: { ID: req.body.ID } }
-      ).then(function (result) {
         if (result) {
           res.status(200).send({"msg":"Update Succesfull",
           "result":result});
@@ -258,10 +248,12 @@ var CustomerDetails = {
         }
       });
     }
+    // Catching result and error message
   },
+
   GetKycDoc: async function (req, res, next) {
-    var filepath = `./KycDocs/${req.params.id}/${req.params.docname}`;
-    var fileextension = req.params.docname.substr(
+    const filepath = `./kycinfo/${req.params.id}/${req.params.docname}`;
+    const fileextension = req.params.docname.substr(
       req.params.docname.lastIndexOf(".") + 1
     );
     fs.readFile(filepath, (err, data) => {
@@ -274,4 +266,5 @@ var CustomerDetails = {
     });
   },
 };
+
 module.exports = CustomerDetails;
