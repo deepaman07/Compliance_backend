@@ -176,7 +176,7 @@ const CustomerDetails = {
       if (err) {
         return res.send(err);
       } else {
-        console.log(req.files.Pancard[0].filename);
+        console.log(req.files.Pancard);
         var docLink = `${process.env.LOCALHOST}details/kycinfo/${req.body.CustomerID}/`;
         const data = {
           CustomerID: Number(req.body.CustomerID),
