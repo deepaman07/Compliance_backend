@@ -62,7 +62,7 @@ var otpController = {
       } else {
         x = true;
       }
-    });
+    }
     if (x === true) {
       // insert into OtpSchema
       OtpSchema.create({
