@@ -34,9 +34,7 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
   } else {
     req.fileValidationError = `goes wrong on the file type of ${file.fieldname}`;
-    return cb(
-      new Error("Invalid upload: fieldname should be image ")
-    );
+    return cb(new Error("Invalid upload: fieldname should be image "));
   }
 };
 
@@ -165,7 +163,8 @@ var CustomerDetails = {
         { where: { ID: req.body.ID } }
       ).then(function (result) {
         if (result) {
-          res.status(200).json({ msg: result });
+          res.status(200).json({"msg":"Update Succesfull",
+          "result":result});
         } else {
           res.status(400).send("Error in update new record");
         }
@@ -174,8 +173,8 @@ var CustomerDetails = {
   },
   KycDocuments: async function (req, res, next) {
     await upload(req, res, function (err) {
-      if(req.fileValidationError) {
-        return res.send({"msg":req.fileValidationError});
+      if (req.fileValidationError) {
+        return res.send({ msg: req.fileValidationError });
       }
       if (err) {
         return res.send(err);
@@ -251,10 +250,9 @@ var CustomerDetails = {
         },
         { where: { ID: req.body.ID } }
       ).then(function (result) {
-        const obj = { result };
-        const str = util.inspect(obj);
         if (result) {
-          res.status(200).send(str);
+          res.status(200).send({"msg":"Update Succesfull",
+          "result":result});
         } else {
           res.status(400).send("Error in update new record");
         }

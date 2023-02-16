@@ -1,17 +1,17 @@
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
-  'PBMC_Api',
-  'root',
-  'T0day@1234',
-    {
-      host: 'localhost',
-      dialect: 'mysql',
-      define: {
-        timestamps: false,
-        freezeTableName: true
-    }
-    }
+  process.env.DATABASE_NAME,
+  process.env.USER_NAME,
+  process.env.PASSWORD,
+  {
+    host: process.env.HOST,
+    dialect: process.env.DIALECT,
+    define: {
+      timestamps: false,
+      freezeTableName: true,
+    },
+  }
   );
 sequelize.authenticate().then(() => {
   console.log('Connection has been established successfully.');
