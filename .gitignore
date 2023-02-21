@@ -1,2 +1,6 @@
 node_modules/*
-.env
+.env*
+.jpg*
+.png*
+.ps1*
+KycDocs/

@@ -57,42 +57,69 @@ const upload = multer({ storage: storage, fileFilter: fileFilter }).fields([
 const CustomerDetails = {
   ReadBasicInfo: async function (req, res, next) {
     // Creating entries using info json object
-
-    const users = await BasicInfo.findAll({
-      attributes: ["ID", "Username", "MobileNumber", "EmailId"],
-    });
-    if (users) {
-      res.status(200).json(users);
-    } else {
-      res.status(400).send("Internal server error!");
+    try {
+      const response = await BasicInfo.findAll({
+        where: { MobileNumber: req.params.mobileNumber },
+      });
+      if (response) {
+        res.status(200).json(response);
+      }
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  },
+  ReadBankInfo: async function (req, res, next) {
+    // Creating entries using info json object
+    try {
+      const response = await BankInfo.findAll({
+        where: { CustomerID: req.params.id },
+      });
+      if (response) {
+        res.status(200).json(response);
+      }
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  },
+  ReadKYCInfo: async function (req, res, next) {
+    // Creating entries using info json object
+    try {
+      const response = await KycInfo.findAll({
+        where: { CustomerID: req.params.id },
+      });
+      if (response) {
+        res.status(200).json(response);
+      }
+    } catch (err) {
+      res.status(400).send(err);
     }
   },
 
   CreateBasicInfo: async function (req, res, next) {
     // Making json object to push the data for basic info
-    let customerBasicInfo = {
-      Username: req.body.Username,
-      FatherName: req.body.FatherName,
-      MobileNumber: req.body.MobileNumber,
-      EmailId: req.body.EmailId,
-      PanNumber: req.body.PanNumber,
-      DOB: req.body.DOB,
-      Address: req.body.Address,
-      Pincode: req.body.Pincode,
-      State: req.body.State,
-      City: req.body.City,
-      GSTNumber: req.body.GSTNumber,
-      MSMENumber: req.body.MSMENumber,
-    };
+    try {
+      let customerBasicInfo = {
+        Username: req.body.Username,
+        FatherName: req.body.FatherName,
+        MobileNumber: req.body.MobileNumber,
+        EmailId: req.body.EmailId,
+        PanNumber: req.body.PanNumber,
+        DOB: req.body.DOB,
+        Address: req.body.Address,
+        Pincode: req.body.Pincode,
+        State: req.body.State,
+        City: req.body.City,
+        GSTNumber: req.body.GSTNumber,
+        MSMENumber: req.body.MSMENumber,
+      };
 
-    // Creating entries using info json object
-    const result = await BasicInfo.create(customerBasicInfo);
-
-    // Catching result and error message
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res.status(400).send("Internal server error!");
+      // Creating entries using info json object
+      const response = await BasicInfo.create(customerBasicInfo);
+      if (response) {
+        res.status(200).json(response);
+      }
+    } catch (err) {
+      res.status(400).send(err);
     }
   },
 
@@ -111,18 +138,18 @@ const CustomerDetails = {
       GSTNumber: req.body.GSTNumber,
       MSMENumber: req.body.MSMENumber,
     };
-    BasicInfo.update(customerBasicInfo, { where: { ID: req.body.ID } })
-      .then((result) => {
-        console.log(result);
-        res.status(200).json({
-          msg: "update succesfull",
-          customerId: req.body.ID,
-          error: false,
-        });
-      })
-      .catch((err) => {
-        res.status(200).json({ msg: "updation failed", error: true });
+    const response = await BasicInfo.update(customerBasicInfo, {
+      where: { MobileNumber: req.body.MobileNumber },
+    });
+    if (response) {
+      res.status(200).json({
+        msg: "update succesfull",
+        MobileNumber: req.body.MobileNumber,
+        error: false,
       });
+    } else {
+      res.status(200).send(err);
+    }
   },
   BankInfo: async function (req, res, next) {
     let customerBankInfo = {
@@ -161,8 +188,7 @@ const CustomerDetails = {
         where: { CustomerID: req.body.CustomerID },
       }).then(function (result) {
         if (result) {
-          res.status(200).json({"msg":"Update Succesfull",
-          "result":result});
+          res.status(200).json({ msg: "Update Succesfull", result: result });
         } else {
           res.status(400).send("Error in update new record");
         }
@@ -241,8 +267,7 @@ const CustomerDetails = {
         const obj = { result };
         const str = util.inspect(obj);
         if (result) {
-          res.status(200).send({"msg":"Update Succesfull",
-          "result":result});
+          res.status(200).send({ msg: "Update Succesfull", result: result });
         } else {
           res.status(400).send("Error in update new record");
         }

@@ -1,7 +1,6 @@
 const { Joi } = require("celebrate");
 const CustomerDetailsValidator = {
   insertBasicInfo_POST_Schema: Joi.object().keys({
-    ID: Joi.alternatives([Joi.allow(null), Joi.number()]),
     Username: Joi.string().required(),
     FatherName: Joi.string().required(),
     MobileNumber: Joi.string().required(),
@@ -13,8 +12,8 @@ const CustomerDetailsValidator = {
     ]),
     Address: Joi.string().required(),
     Pincode: Joi.string().required(),
-    State: Joi.string().required(),
-    City: Joi.string().required(),
+    State: Joi.number().required(),
+    City: Joi.number().required(),
     GSTNumber: Joi.number().required().allow(0, 1, "0", "1"),
     MSMENumber: Joi.number().required().allow(0, 1, "0", "1"),
   }),
@@ -26,7 +25,7 @@ const CustomerDetailsValidator = {
     IfscCode: Joi.string().required(),
     PanNumber: Joi.string().required(),
     Pincode: Joi.string().required(),
-    BranchState: Joi.string().required(),
+    BranchState: Joi.number().required(),
     BranchAddress: Joi.string().required(),
   }),
   insertKycInfo_POST_Schema: Joi.object().keys({

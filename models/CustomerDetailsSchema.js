@@ -39,11 +39,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     State: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     City: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     GSTNumber: {
@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     BranchState: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     BranchAddress: {

@@ -15,6 +15,14 @@ const ReadallStates = async (req, res) => {
 
 const ReadallCity = async (req, res) => {
   try {
+    const city = await City.findAll();
+    res.status(200).send(city);
+  } catch (error) {
+    throw error;
+  }
+};
+const ReadSpecificCity = async (req, res) => {
+  try {
     const city = await City.findAll({
       where: {
         state_id: req.params.id,
@@ -28,4 +36,5 @@ const ReadallCity = async (req, res) => {
 module.exports = {
   ReadallStates,
   ReadallCity,
+  ReadSpecificCity,
 };
