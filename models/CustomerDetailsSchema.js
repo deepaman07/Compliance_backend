@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     BankName: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     AccountHolderName: {

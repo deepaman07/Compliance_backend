@@ -36,6 +36,7 @@ db.userToken = require("./user_token")(sequelize, DataTypes);
 db.customerDetails = require("./CustomerDetailsSchema")(sequelize, DataTypes);
 db.stateList = require("./State_city_schema")(sequelize, DataTypes);
 db.product = require("./productSchema")(sequelize, DataTypes);
+db.employmenttypes = require("./EmploymentTypeSchema")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("Yes re-sync done!");

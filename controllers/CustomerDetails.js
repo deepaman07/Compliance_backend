@@ -142,11 +142,7 @@ const CustomerDetails = {
       where: { MobileNumber: req.body.MobileNumber },
     });
     if (response) {
-      res.status(200).json({
-        msg: "update succesfull",
-        MobileNumber: req.body.MobileNumber,
-        error: false,
-      });
+      res.status(200).json(customerBasicInfo);
     } else {
       res.status(200).send(err);
     }
@@ -177,7 +173,7 @@ const CustomerDetails = {
       //Insert into table bankinfo
       await BankInfo.create(customerBankInfo).then(function (result) {
         if (result) {
-          res.status(200).json({ msg: res });
+          res.status(200).json(customerBankInfo);
         } else {
           res.status(400).send("Error in insert new record");
         }
@@ -188,7 +184,7 @@ const CustomerDetails = {
         where: { CustomerID: req.body.CustomerID },
       }).then(function (result) {
         if (result) {
-          res.status(200).json({ msg: "Update Succesfull", result: result });
+          res.status(200).json(customerBankInfo);
         } else {
           res.status(400).send("Error in update new record");
         }
@@ -216,8 +212,12 @@ const CustomerDetails = {
           GSTCertificate: docLink + req.files.GSTCertificate[0].filename,
         };
         console.log(data);
+        const authHeader = req.headers["authorization"];
+        const token = authHeader && authHeader.split(" ")[1];
         axios
-          .post(`${process.env.LOCALHOST}details/kycinfo`, data)
+          .post(`${process.env.LOCALHOST}details/kycinfo`, data, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
           // Print data
           .then((response) => {
             if (response) {

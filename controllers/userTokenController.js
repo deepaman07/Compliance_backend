@@ -23,6 +23,10 @@ const Register = async (req, res) => {
   };
   try {
     const token = await Token.create(info);
+    res.cookie("userCookie", "aman", {
+      httpOnly: false,
+    });
+    // res.send(req.cookies);
     if (token) res.status(200).send(token);
   } catch (error) {
     throw error;
@@ -34,10 +38,10 @@ const Register = async (req, res) => {
 const Logout = async (req, res) => {
   let id = req.params.id;
   const logout = await Token.update(
-    { isactive: 0, updatedOn: Date() },
-    { where: { id: id } }
+    { IsActive: 0, updatedOn: Date() },
+    { where: { CustomerID: id } }
   );
-  res.status(200).send(logout);
+  res.status(200).send("logout");
 };
 
 module.exports = {

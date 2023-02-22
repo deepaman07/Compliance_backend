@@ -19,7 +19,7 @@ const CustomerDetailsValidator = {
   }),
   insertBankInfo_POST_Schema: Joi.object().keys({
     CustomerID: Joi.number().required(),
-    BankName: Joi.string().required(),
+    BankName: Joi.number().required(),
     AccountHolderName: Joi.string().required(),
     AccountNumber: Joi.string().required(),
     IfscCode: Joi.string().required(),
