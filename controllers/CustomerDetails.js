@@ -4,6 +4,7 @@ const multer = require("multer");
 const util = require("util");
 const path = require("path");
 const fs = require("fs");
+const { custom } = require("joi");
 require("dotenv").config();
 
 const BasicInfo = CustomerDetailsSchema.customerDetails.BasicInfo;
@@ -20,7 +21,8 @@ const storage = multer.diskStorage({
     cb(null, folderPath);
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + path.extname(file.originalname));
+    // console.log(file.originalname);
+    cb(null, file.originalname);
   },
 });
 
@@ -199,85 +201,87 @@ const CustomerDetails = {
       if (err) {
         return res.send(err);
       } else {
-        console.log(req.files.Pancard);
         var docLink = `${process.env.LOCALHOST}details/kycinfo/${req.body.CustomerID}/`;
-        const data = {
-          CustomerID: Number(req.body.CustomerID),
-          PanCard: docLink + req.files.PanCard[0].filename,
-          CancelCheque: docLink + req.files.CancelCheque[0].filename,
-          AddressProof: docLink + req.files.AddressProof[0].filename,
-          HighestEducation: docLink + req.files.HighestEducation[0].filename,
-          PartnerPhoto: docLink + req.files.PartnerPhoto[0].filename,
-          MSMECertificate: docLink + req.files.MSMECertificate[0].filename,
-          GSTCertificate: docLink + req.files.GSTCertificate[0].filename,
-        };
-        console.log(data);
-        const authHeader = req.headers["authorization"];
-        const token = authHeader && authHeader.split(" ")[1];
-        axios
-          .post(`${process.env.LOCALHOST}details/kycinfo`, data, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          // Print data
-          .then((response) => {
-            if (response) {
-              res.status(200).send({ msg: "saved successfully" });
+        KycInfo.count({
+          where: { CustomerID: Number(req.body.CustomerID) },
+        }).then((count) => {
+          let customerKycInfo = {
+            CustomerID: Number(req.body.CustomerID),
+          };
+          if (req.files.PanCard !== undefined) {
+            customerKycInfo.PanCard = docLink + req.files.PanCard[0].filename;
+          }
+          if (req.files.CancelCheque !== undefined) {
+            customerKycInfo.CancelCheque =
+              docLink + req.files.CancelCheque[0].filename;
+          }
+
+          if (req.files.AddressProof !== undefined) {
+            customerKycInfo.AddressProof =
+              docLink + req.files.AddressProof[0].filename;
+          }
+          if (req.files.HighestEducation !== undefined) {
+            customerKycInfo.HighestEducation =
+              docLink + req.files.HighestEducation[0].filename;
+          }
+          if (req.files.PartnerPhoto !== undefined) {
+            customerKycInfo.PartnerPhoto =
+              docLink + req.files.PartnerPhoto[0].filename;
+          }
+          if (req.files.MSMECertificate !== undefined) {
+            customerKycInfo.MSMECertificate =
+              docLink + req.files.MSMECertificate[0].filename;
+          }
+          if (req.files.GSTCertificate !== undefined) {
+            customerKycInfo.GSTCertificate =
+              docLink + req.files.GSTCertificate[0].filename;
+          }
+          if (count > 0) {
+            KycInfo.update(customerKycInfo, {
+              where: { CustomerID: req.body.CustomerID },
+            }).then(function (result) {
+              const obj = { result };
+              const str = util.inspect(obj);
+              if (result) {
+                res
+                  .status(200)
+                  .send({ msg: "Update Succesfull", result: result });
+              } else {
+                res.status(400).send("Error in update new record");
+              }
+            });
+          } else {
+            if (customerKycInfo.PanCard === undefined)
+              customerKycInfo.PanCard = " ";
+            if (customerKycInfo.AddressProof === undefined)
+              customerKycInfo.AddressProof = " ";
+            if (customerKycInfo.PartnerPhoto === undefined)
+              customerKycInfo.PartnerPhoto = " ";
+            if (customerKycInfo.CancelCheque === undefined)
+              customerKycInfo.CancelCheque = " ";
+
+            if (customerKycInfo.HighestEducation === undefined)
+              customerKycInfo.HighestEducation = " ";
+            if (customerKycInfo.MSMECertificate === undefined)
+              customerKycInfo.MSMECertificate = " ";
+
+            if (customerKycInfo.GSTCertificate === undefined)
+              customerKycInfo.GSTCertificate = " ";
+            const result = KycInfo.create(customerKycInfo);
+            if (result) {
+              res.status(200).json(result);
             } else {
-              res.status(400).send("Error to fetch data\n" + error);
+              res.status(400).send("Internal server error!");
             }
-          });
+            // res.status(200).send(isExist);
+          }
+        });
       }
     });
   },
-  KycInfo: async function (req, res, next) {
-    // Making json object to push the data for kyc info
-    var isExist;
-    await KycInfo.count({ where: { CustomerID: req.body.CustomerID } }).then(
-      (count) => {
-        if (count != 0) {
-          isExist = false;
-          // res.status(200).send(isExist);
-        } else {
-          isExist = true;
-          // res.status(200).send(isExist);
-        }
-      }
-    );
-    let customerKycInfo = {
-      CustomerID: req.body.CustomerID,
-      PanCard: req.body.PanCard,
-      CancelCheque: req.body.CancelCheque,
-      AddressProof: req.body.AddressProof,
-      HighestEducation: req.body.HighestEducation,
-      PartnerPhoto: req.body.PartnerPhoto,
-      MSMECertificate: req.body.MSMECertificate,
-      GSTCertificate: req.body.GSTCertificate,
-    };
-    if (isExist === true) {
-      const result = await KycInfo.create(customerKycInfo);
-      if (result) {
-        res.status(200).json(result);
-      } else {
-        res.status(400).send("Internal server error!");
-      }
-    } else {
-      KycInfo.update(customerKycInfo, {
-        where: { CustomerID: req.body.CustomerID },
-      }).then(function (result) {
-        const obj = { result };
-        const str = util.inspect(obj);
-        if (result) {
-          res.status(200).send({ msg: "Update Succesfull", result: result });
-        } else {
-          res.status(400).send("Error in update new record");
-        }
-      });
-    }
-    // Catching result and error message
-  },
-
   GetKycDoc: async function (req, res, next) {
-    const filepath = `./kycinfo/${req.params.id}/${req.params.docname}`;
+    const filepath = `./KycDocs/${req.params.id}/${req.params.docname}`;
+    console.log(req.params.id);
     const fileextension = req.params.docname.substr(
       req.params.docname.lastIndexOf(".") + 1
     );

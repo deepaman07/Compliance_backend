@@ -41,12 +41,6 @@ router.post(
   asyncMiddleware(CustomerDetails.BankInfo)
 );
 router.post(
-  "/kycinfo",
-  tokenAuthentication,
-  celebrate({ body: CustomerDetailsValidator.insertKycInfo_POST_Schema }),
-  asyncMiddleware(CustomerDetails.KycInfo)
-);
-router.post(
   "/kycdocuments",
   tokenAuthentication,
   asyncMiddleware(CustomerDetails.KycDocuments)
