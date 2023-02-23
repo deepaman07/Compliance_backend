@@ -32,6 +32,7 @@ const ReadFinancialService = async (req, res) => {
     const financialService = await FinancialService.findAll({
       where: {
         sub_product_id: req.params.id,
+        created_by: req.params.customerID,
       },
     });
     res.status(200).send(financialService);
@@ -43,7 +44,6 @@ const InsertFinancialService = async (req, res) => {
   try {
     let info = {
       sub_product_id: req.body.sub_product_id,
-      customer_name: req.body.customer_name,
       customer_mobile: req.body.customer_mobile,
       city_id: req.body.city_id,
       loan_amount: req.body.loan_amount,
@@ -51,6 +51,7 @@ const InsertFinancialService = async (req, res) => {
       employment_type: req.body.employment_type,
       created_by: req.body.created_by,
       is_active: 1,
+      is_present: req.body.is_present,
       created_at: Date(),
       updated_at: Date(),
     };

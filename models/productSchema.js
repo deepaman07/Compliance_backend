@@ -102,10 +102,6 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      customer_name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
       customer_mobile: {
         type: DataTypes.STRING(100),
         allowNull: false,
@@ -134,6 +130,11 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 1,
+      },
+      is_present: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 0,
       },
       created_at: {
         type: DataTypes.DATE(),

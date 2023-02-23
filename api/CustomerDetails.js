@@ -25,7 +25,6 @@ router.post(
 );
 router.post(
   "/createbasicinfo",
-  tokenAuthentication,
   celebrate({ body: CustomerDetailsValidator.insertBasicInfo_POST_Schema }),
   asyncMiddleware(CustomerDetails.CreateBasicInfo)
 );

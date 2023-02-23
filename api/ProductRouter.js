@@ -10,7 +10,7 @@ router.post("/readproducts", ProductController.ReadProducts);
 router.post("/readsubproducts/:id", ProductController.ReadSubProducts);
 
 router.post(
-  "/readfinancialservices/:id",
+  "/readfinancialservices/:id/:customerID",
   tokenAuthentication,
   ProductController.ReadFinancialService
 );
