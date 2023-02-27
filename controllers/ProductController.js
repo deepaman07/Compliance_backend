@@ -1,7 +1,7 @@
 const ProductSchema = require("../models/");
 const Product = ProductSchema.product.Products;
 const SubProduct = ProductSchema.product.SubProduct;
-const FinancialService = ProductSchema.product.Financial_service_lead_details;
+const FinancialService = ProductSchema.product.LeadDetails;
 
 // 1. create product
 
@@ -18,7 +18,7 @@ const ReadSubProducts = async (req, res) => {
   try {
     const subproducts = await SubProduct.findAll({
       where: {
-        product_id: req.params.id,
+        ProductId: req.params.id,
       },
     });
     res.status(200).send(subproducts);
@@ -31,8 +31,8 @@ const ReadFinancialService = async (req, res) => {
   try {
     const financialService = await FinancialService.findAll({
       where: {
-        sub_product_id: req.params.id,
-        created_by: req.params.customerID,
+        SubProductId: req.params.subproductid,
+        FINCode: req.params.customerid,
       },
     });
     res.status(200).send(financialService);
@@ -40,20 +40,31 @@ const ReadFinancialService = async (req, res) => {
     throw error;
   }
 };
+
+const ReadFinancialServiceAll = async (req, res) => {
+  try {
+    const financialService = await FinancialService.findAll();
+    res.status(200).send(financialService);
+  } catch (error) {
+    throw error;
+  }
+};
+
 const InsertFinancialService = async (req, res) => {
   try {
     let info = {
-      sub_product_id: req.body.sub_product_id,
-      customer_mobile: req.body.customer_mobile,
-      city_id: req.body.city_id,
-      loan_amount: req.body.loan_amount,
-      net_monthly_income: req.body.net_monthly_income,
-      employment_type: req.body.employment_type,
-      created_by: req.body.created_by,
-      is_active: 1,
-      is_present: req.body.is_present,
-      created_at: Date(),
-      updated_at: Date(),
+      SubProductId: req.body.SubProductId,
+      CustomerMobile: req.body.CustomerMobile,
+      CityId: req.body.CityId,
+      LoanAmount: req.body.LoanAmount,
+      NetMonthlyIncome: req.body.NetMonthlyIncome,
+      EmploymentType: req.body.EmploymentType,
+      FINCode: req.body.FINCode,
+      IsActive: 1,
+      GrossSales: req.body.GrossSales,
+      IsPresent: req.body.IsPresent,
+      CreatedAt: Date(),
+      UpdatedAt: Date(),
     };
     const financialService = await FinancialService.create(info);
     res.status(200).send(financialService);
@@ -66,5 +77,6 @@ module.exports = {
   ReadProducts,
   ReadSubProducts,
   ReadFinancialService,
+  ReadFinancialServiceAll,
   InsertFinancialService,
 };

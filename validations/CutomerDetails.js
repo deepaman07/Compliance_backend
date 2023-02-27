@@ -1,11 +1,11 @@
 const { Joi } = require("celebrate");
 const CustomerDetailsValidator = {
   insertBasicInfo_POST_Schema: Joi.object().keys({
-    Username: Joi.string().required(),
+    CustomerName: Joi.string().required(),
     FatherName: Joi.string().required(),
-    MobileNumber: Joi.string().required(),
+    MobileNumber: Joi.number().required(),
     EmailId: Joi.string().required(),
-    PanNumber: Joi.string().required(),
+    PanNumber: Joi.number().required(),
     DOB: Joi.alternatives([
       Joi.string().allow(""),
       Joi.string().regex(/^[0-3]{0,1}[0-9]{1}\/[0-1]{0,1}[0-9]{1}\/[0-9]{4}$/),

@@ -13,13 +13,13 @@ const Token = db.userToken;
 const Register = async (req, res) => {
   let jwtToken = jwt.sign({ email: req.body.email }, JWT_SECRET_KEY);
   let info = {
-    CustomerID: req.body.CustomerID,
+    FINCode: req.body.FINCode,
     MobileNumber: req.body.MobileNumber,
     Otp: req.body.Otp,
     Token: jwtToken,
     IsActive: 1,
-    CreatedOn: Date(),
-    UpdatedOn: Date(),
+    CreatedAt: Date(),
+    UpdatedAt: Date(),
   };
   try {
     const token = await Token.create(info);
@@ -36,10 +36,9 @@ const Register = async (req, res) => {
 // 2. Logout user
 
 const Logout = async (req, res) => {
-  let id = req.params.id;
   const logout = await Token.update(
-    { IsActive: 0, updatedOn: Date() },
-    { where: { CustomerID: id } }
+    { IsActive: 0, UpdatedAt: Date() },
+    { where: { FINCode: req.params.id } }
   );
   res.status(200).send("logout");
 };

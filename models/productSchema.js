@@ -2,162 +2,172 @@ module.exports = function (sequelize, DataTypes) {
   const Products = sequelize.define(
     "products",
     {
-      id: {
+      Id: {
         autoIncrement: true,
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
       },
-      name: {
+      ProductName: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      Icon: {
         type: DataTypes.STRING(191),
         allowNull: false,
       },
-      icon: {
-        type: DataTypes.STRING(191),
-        allowNull: true,
-      },
-      is_active: {
+      IsActive: {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 1,
       },
-      created_at: {
+      CreatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updated_at: {
+      UpdatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {
       sequelize,
       tableName: "products",
       timestamps: false,
-      createdAt: false,
-      updatedAt: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "id" }],
+          fields: [{ name: "Id" }],
         },
       ],
     }
   );
   const SubProduct = sequelize.define(
-    "sub_products",
+    "subproducts",
     {
-      id: {
+      Id: {
         autoIncrement: true,
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
       },
-      name: {
+      SubProductName: {
         type: DataTypes.STRING(191),
         allowNull: false,
       },
-      product_id: {
+      ProductId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
-      is_active: {
+      IsActive: {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 1,
       },
-      created_at: {
+      CreatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updated_at: {
+      UpdatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {
       sequelize,
-      tableName: "sub_products",
+      tableName: "subproducts",
       timestamps: false,
-      createdAt: false,
-      updatedAt: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "id" }],
+          fields: [{ name: "Id" }],
         },
       ],
     }
   );
-  const Financial_service_lead_details = sequelize.define(
-    "financial_service_lead_details",
+  const LeadDetails = sequelize.define(
+    "leaddetails",
     {
-      id: {
+      Id: {
         autoIncrement: true,
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
       },
-      sub_product_id: {
+      SubProductId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      customer_mobile: {
-        type: DataTypes.STRING(100),
+      CustomerMobile: {
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
-      city_id: {
+      CityId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      loan_amount: {
-        type: DataTypes.STRING(100),
+      LoanAmount: {
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
-      net_monthly_income: {
-        type: DataTypes.STRING(100),
+      NetMonthlyIncome: {
+        type: DataTypes.BIGINT,
         allowNull: false,
       },
-      employment_type: {
+      EmploymentType: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      created_by: {
+      FINCode: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      is_active: {
-        type: DataTypes.TINYINT,
+      GrossSales: {
+        type: DataTypes.BIGINT,
         allowNull: false,
-        defaultValue: 1,
       },
-      is_present: {
+      IsPresent: {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 0,
       },
-      created_at: {
-        type: DataTypes.DATE(),
+      IsActive: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 1,
       },
-      updated_at: {
+      CreatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      UpdatedAt: {
+        type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {
       sequelize,
-      tableName: "financial_service_lead_details",
+      tableName: "leaddetails",
       timestamps: false,
-      createdAt: false,
-      updatedAt: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "id" }],
+          fields: [{ name: "Id" }],
         },
       ],
     }
   );
-  return { Products, SubProduct, Financial_service_lead_details };
+  return { Products, SubProduct, LeadDetails };
 };

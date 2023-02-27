@@ -10,9 +10,15 @@ router.post("/readproducts", ProductController.ReadProducts);
 router.post("/readsubproducts/:id", ProductController.ReadSubProducts);
 
 router.post(
-  "/readfinancialservices/:id/:customerID",
+  "/readfinancialservices/:subproductid/:customerid",
   tokenAuthentication,
   ProductController.ReadFinancialService
+);
+
+router.post(
+  "/readfinancialservices",
+  tokenAuthentication,
+  ProductController.ReadFinancialServiceAll
 );
 router.post(
   "/insertfinancialservices",

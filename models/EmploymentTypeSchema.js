@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const employment_types = sequelize.define(
-    "EmploymentTypes",
+    "employmenttypes",
     {
-      id: {
+      Id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -16,11 +16,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 1,
       },
-      created_at: {
+      CreatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updated_at: {
+      UpdatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {

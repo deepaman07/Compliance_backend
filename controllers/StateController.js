@@ -25,7 +25,7 @@ const ReadSpecificCity = async (req, res) => {
   try {
     const city = await City.findAll({
       where: {
-        state_id: req.params.id,
+        StateId: req.params.id,
       },
     });
     res.status(200).send(city);

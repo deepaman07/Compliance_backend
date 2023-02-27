@@ -32,9 +32,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.userToken = require("./user_token")(sequelize, DataTypes);
+db.userToken = require("./usertokens")(sequelize, DataTypes);
 db.customerDetails = require("./CustomerDetailsSchema")(sequelize, DataTypes);
-db.stateList = require("./State_city_schema")(sequelize, DataTypes);
+db.stateList = require("./statecityschema")(sequelize, DataTypes);
 db.product = require("./productSchema")(sequelize, DataTypes);
 db.employmenttypes = require("./EmploymentTypeSchema")(sequelize, DataTypes);
 

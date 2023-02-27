@@ -2,47 +2,42 @@ module.exports = (sequelize, DataTypes) => {
   const State = sequelize.define(
     "states",
     {
-      id: {
+      Id: {
         autoIncrement: true,
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
       },
-      state: {
+      State: {
         type: DataTypes.STRING(30),
         allowNull: false,
-        unique: "state_UNIQUE",
       },
-      is_active: {
+      IsActive: {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 1,
       },
-      created_at: {
+      CreatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updated_at: {
+      UpdatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {
       sequelize,
       tableName: "states",
       timestamps: false,
-      createdAt: false,
-      updatedAt: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "id" }],
-        },
-        {
-          name: "state_UNIQUE",
-          unique: true,
-          using: "BTREE",
-          fields: [{ name: "state" }],
+          fields: [{ name: "Id" }],
         },
       ],
     }
@@ -50,45 +45,46 @@ module.exports = (sequelize, DataTypes) => {
   const City = sequelize.define(
     "city",
     {
-      id: {
+      Id: {
         autoIncrement: true,
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
       },
-      city: {
+      City: {
         type: DataTypes.STRING(191),
-        allowNull: true,
+        allowNull: false,
       },
-      state_id: {
+      StateId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0,
       },
-      is_active: {
+      IsActive: {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 1,
       },
-      created_at: {
+      CreatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updated_at: {
+      UpdatedAt: {
         type: DataTypes.DATE(),
+        allowNull: false,
+        defaultValue: sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     },
     {
       sequelize,
       tableName: "city",
       timestamps: false,
-      createdAt: false,
-      updatedAt: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "id" }],
+          fields: [{ name: "Id" }],
         },
       ],
     }
