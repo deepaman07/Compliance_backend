@@ -1,5 +1,6 @@
 const db = require("../models");
 var jwt = require("jsonwebtoken");
+const axios = require("axios");
 
 //JWT secret key
 require("dotenv").config();
@@ -43,7 +44,24 @@ const Logout = async (req, res) => {
   res.status(200).send("logout");
 };
 
+const FinCode= async function (req,res) {
+  try{
+    axios.post("https://pbpqaslimapi.policybazaar.com/getAffiliateIdByFinCode", {
+      FinanceCode: req.body.FinanceCode
+    })
+    .then((response) => {
+      res.send(response.data.data);
+    })
+    
+    .catch(error => {
+      console.log(error);
+    });    }catch(err)
+  {
+    res.status(400).send(err);
+  }
+};
 module.exports = {
   Register,
   Logout,
+  FinCode
 };

@@ -9,4 +9,5 @@ router.post("/login", tokenController.Register);
 
 router.put("/logout/:id", tokenController.Logout);
 
+router.post("/fincode", tokenController.FinCode);
 module.exports = router;

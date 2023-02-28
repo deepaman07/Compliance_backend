@@ -1,5 +1,4 @@
 const CustomerDetailsSchema = require("../models/");
-const axios = require("axios");
 const multer = require("multer");
 const util = require("util");
 const path = require("path");
@@ -101,7 +100,7 @@ const CustomerDetails = {
     // Making json object to push the data for basic info
     try {
       let customerBasicInfo = {
-        Username: req.body.Username,
+        CustomerName: req.body.CustomerName,
         FatherName: req.body.FatherName,
         MobileNumber: req.body.MobileNumber,
         EmailId: req.body.EmailId,
