@@ -12,16 +12,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "http://localhost:3000" }));
 
 // Importing Routers
-// const otp = require("./api/otp");
-const customerDetails = require("./api/CustomerDetails");
+// const customerDetails = require("./api/CustomerDetails");
 const userToken = require("./api/tokenRouter");
 const states = require("./api/StateRouter");
 const products = require("./api/ProductRouter");
 const EmploymentType = require("./api/EmploymentTypes");
 
 // Routers connections
-// app.use("/otp", otp);
-app.use("/details", customerDetails);
+// app.use("/details", customerDetails);
 app.use("/api", userToken);
 app.use("/geo", states);
 app.use("/product", products);

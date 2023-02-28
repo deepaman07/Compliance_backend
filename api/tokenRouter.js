@@ -6,7 +6,7 @@ const router = require("express").Router();
 
 // use routers
 router.post("/login", tokenController.Register);
-
+router.post("/fincode", tokenController.FINCode);
 router.put("/logout/:id", tokenController.Logout);
 
 module.exports = router;

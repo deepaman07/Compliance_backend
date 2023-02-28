@@ -1,8 +1,11 @@
+// router
+const router = require("express").Router();
+const { celebrate } = require("celebrate");
+const ProductValidator = require("../validations/ProductValidator");
+
 // importing routers
 const ProductController = require("../controllers/ProductController");
 const tokenAuthentication = require("../middleWare/tokenAuthentication");
-// router
-const router = require("express").Router();
 
 // use routers
 router.post("/readproducts", ProductController.ReadProducts);
@@ -23,6 +26,7 @@ router.post(
 router.post(
   "/insertfinancialservices",
   tokenAuthentication,
+  celebrate({ body: ProductValidator.insertFinancialServices_POST_Schema }),
   ProductController.InsertFinancialService
 );
 

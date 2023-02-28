@@ -8,19 +8,16 @@ const tokenAuthentication = require("../middleWare/tokenAuthentication");
 
 router.post(
   "/getbasicinfo/:mobileNumber",
-  // celebrate({ body: CustomerDetailsValidator.insertBasicInfo_POST_Schema }),
   asyncMiddleware(CustomerDetails.ReadBasicInfo)
 );
 router.post(
   "/getbankinfo/:id",
   tokenAuthentication,
-  // celebrate({ body: CustomerDetailsValidator.insertBasicInfo_POST_Schema }),
   asyncMiddleware(CustomerDetails.ReadBankInfo)
 );
 router.post(
   "/getkycinfo/:id",
   tokenAuthentication,
-  // celebrate({ body: CustomerDetailsValidator.insertBasicInfo_POST_Schema }),
   asyncMiddleware(CustomerDetails.ReadKYCInfo)
 );
 router.post(
