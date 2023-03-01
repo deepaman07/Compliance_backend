@@ -7,7 +7,7 @@ const CustomerDetailsValidator = {
     EmailId: Joi.string().required(),
     PanNumber: Joi.number().required(),
     DOB: Joi.alternatives([
-      Joi.string().allow(""),
+      Joi.string().allow(" "),
       Joi.string().regex(/^[0-3]{0,1}[0-9]{1}\/[0-1]{0,1}[0-9]{1}\/[0-9]{4}$/),
     ]),
     Address: Joi.string().required(),

@@ -5,8 +5,7 @@ const tokenController = require("../controllers/userTokenController");
 const router = require("express").Router();
 
 // use routers
-router.post("/login", tokenController.Register);
 router.post("/fincode", tokenController.FINCode);
+router.post("/login", tokenController.Register);
 router.put("/logout/:id", tokenController.Logout);
-
 module.exports = router;

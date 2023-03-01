@@ -22,7 +22,7 @@ router.post(
 );
 router.post(
   "/createbasicinfo",
-  celebrate({ body: CustomerDetailsValidator.insertBasicInfo_POST_Schema }),
+  // celebrate({ body: CustomerDetailsValidator.insertBasicInfo_POST_Schema }),
   asyncMiddleware(CustomerDetails.CreateBasicInfo)
 );
 router.post(
@@ -47,5 +47,9 @@ router.get(
   tokenAuthentication,
   asyncMiddleware(CustomerDetails.GetKycDoc)
 );
-
+router.post(
+  "/fincode",
+  // tokenAuthentication,
+  asyncMiddleware(CustomerDetails.FinCode)
+);
 module.exports = router;

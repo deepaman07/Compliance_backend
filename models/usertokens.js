@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const UserToken = sequelize.define(
-    "userTokens",
+    "usertokens",
     {
       Id: {
         autoIncrement: true,
