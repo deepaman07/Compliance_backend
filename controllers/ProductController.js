@@ -40,7 +40,18 @@ const ReadFinancialService = async (req, res) => {
     throw error;
   }
 };
-
+const ReadFinancialServiceFincode = async (req,res) => {
+  try {
+    const financialService = await FinancialService.findAll({
+      where: {
+        FINCode: req.params.customerid,
+      },
+    });
+    res.status(200).send(financialService);
+  } catch (error) {
+    throw error;
+  }
+}
 const ReadFinancialServiceAll = async (req, res) => {
   try {
     const financialService = await FinancialService.findAll();
@@ -54,6 +65,7 @@ const InsertFinancialService = async (req, res) => {
   try {
     let info = {
       SubProductId: req.body.SubProductId,
+      Name:req.body.Name,
       CustomerMobile: req.body.CustomerMobile,
       CityId: req.body.CityId,
       LoanAmount: req.body.LoanAmount,
@@ -79,4 +91,5 @@ module.exports = {
   ReadFinancialService,
   ReadFinancialServiceAll,
   InsertFinancialService,
+  ReadFinancialServiceFincode
 };

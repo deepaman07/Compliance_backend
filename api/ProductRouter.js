@@ -1,6 +1,9 @@
 // importing routers
 const ProductController = require("../controllers/ProductController");
 const tokenAuthentication = require("../middleWare/tokenAuthentication");
+const FinancialServiceValidator = require("../validations/ProductValidator");
+const { celebrate } = require("celebrate");
+
 // router
 const router = require("express").Router();
 
@@ -10,11 +13,16 @@ router.post("/readproducts", ProductController.ReadProducts);
 router.post("/readsubproducts/:id", ProductController.ReadSubProducts);
 
 router.post(
+  "/readallfinancialservices/:customerid",
+  tokenAuthentication,
+  ProductController.ReadFinancialServiceFincode
+);
+
+router.post(
   "/readfinancialservices/:subproductid/:customerid",
   tokenAuthentication,
   ProductController.ReadFinancialService
 );
-
 router.post(
   "/readfinancialservices",
   tokenAuthentication,
@@ -23,6 +31,9 @@ router.post(
 router.post(
   "/insertfinancialservices",
   tokenAuthentication,
+  celebrate({
+    body: FinancialServiceValidator.insertFinancialServices_POST_Schema,
+  }),
   ProductController.InsertFinancialService
 );
 
