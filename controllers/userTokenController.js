@@ -39,7 +39,7 @@ const Register = async (req, res) => {
 const Logout = async (req, res) => {
   const logout = await Token.update(
     { IsActive: 0, UpdatedAt: Date() },
-    { where: { FINCode: req.params.id } }
+    { where: { Id: req.params.id } }
   );
   res.status(200).send("logout");
 };

@@ -2,7 +2,7 @@ const ProductSchema = require("../models/");
 const Product = ProductSchema.product.Products;
 const SubProduct = ProductSchema.product.SubProduct;
 const FinancialService = ProductSchema.product.LeadDetails;
-
+const { Op, literal } = require("sequelize");
 // 1. create product
 
 const ReadProducts = async (req, res) => {
@@ -40,7 +40,7 @@ const ReadFinancialService = async (req, res) => {
     throw error;
   }
 };
-const ReadFinancialServiceFincode = async (req,res) => {
+const ReadFinancialServiceFincode = async (req, res) => {
   try {
     const financialService = await FinancialService.findAll({
       where: {
@@ -51,7 +51,7 @@ const ReadFinancialServiceFincode = async (req,res) => {
   } catch (error) {
     throw error;
   }
-}
+};
 const ReadFinancialServiceAll = async (req, res) => {
   try {
     const financialService = await FinancialService.findAll();
@@ -65,7 +65,7 @@ const InsertFinancialService = async (req, res) => {
   try {
     let info = {
       SubProductId: req.body.SubProductId,
-      Name:req.body.Name,
+      Name: req.body.Name,
       CustomerMobile: req.body.CustomerMobile,
       CityId: req.body.CityId,
       LoanAmount: req.body.LoanAmount,
@@ -84,12 +84,91 @@ const InsertFinancialService = async (req, res) => {
     throw error;
   }
 };
-
+const Dashboard = async (req, res) => {
+  try {
+    const finCode = req.body.FINCode;
+    const startDate = new Date("2022-04-01 00:00:00");
+    const endDate = new Date("2023-04-01 00:00:00");
+    FinancialService.findAll({
+      attributes: [
+        [literal("COUNT(*)"), "TotalRecords"],
+        [literal("YEAR(CreatedAt)"), "Year"],
+        [literal("MONTH(CreatedAt)"), "Month"],
+      ],
+      where: {
+        FINCode: finCode,
+        createdAt: {
+                [Op.gte]: startDate,
+                [Op.lt]: endDate,
+              },
+      },
+      group: ["Year", "Month"],
+    })
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // await FinancialService.count({
+    //   where: {
+    //     FINCode: finCode,
+    //     createdAt: {
+    //       [Op.gte]: startDate,
+    //       [Op.lt]: endDate,
+    //     },
+    //   },
+    // })
+    //   .then((count) => {
+    //     console.log(`Total records: ${count}`);
+    //     res.status(200).send({"Count":count});
+    //   })
+    //   .catch((error) => {
+    //     res.status(400);
+    //     console.error(error);
+    //   });
+    res.status(400);
+  } catch (error) {
+    throw error;
+  }
+};
+const DashboardAll = async (req, res) => {
+  try {
+    const startDate = new Date("2022-04-01 00:00:00");
+    const endDate = new Date("2023-04-01 00:00:00");
+    FinancialService.findAll({
+      attributes: [
+        [literal("COUNT(*)"), "TotalRecords"],
+        [literal("YEAR(CreatedAt)"), "Year"],
+        [literal("MONTH(CreatedAt)"), "Month"],
+      ],
+      where: {
+        createdAt: {
+                [Op.gte]: startDate,
+                [Op.lt]: endDate,
+              },
+      },
+      group: ["Year", "Month"],
+    })
+      .then((result) => {
+        res.status(200).send(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    
+    res.status(400);
+  } catch (error) {
+    throw error;
+  }
+};
 module.exports = {
   ReadProducts,
   ReadSubProducts,
   ReadFinancialService,
   ReadFinancialServiceAll,
   InsertFinancialService,
-  ReadFinancialServiceFincode
+  ReadFinancialServiceFincode,
+  Dashboard,
+  DashboardAll
 };

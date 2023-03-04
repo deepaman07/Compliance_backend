@@ -36,5 +36,7 @@ router.post(
   }),
   ProductController.InsertFinancialService
 );
+router.post("/dashboard", tokenAuthentication, ProductController.Dashboard);
+router.post("/dashboardall", tokenAuthentication, ProductController.DashboardAll);
 
 module.exports = router;
