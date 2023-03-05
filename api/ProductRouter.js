@@ -7,17 +7,24 @@ const ProductValidator = require("../validations/ProductValidator");
 const ProductController = require("../controllers/ProductController");
 const tokenAuthentication = require("../middleWare/tokenAuthentication");
 
+// router
+
 // use routers
 router.post("/readproducts", ProductController.ReadProducts);
 
 router.post("/readsubproducts/:id", ProductController.ReadSubProducts);
 
 router.post(
+  "/readallfinancialservices/:customerid",
+  tokenAuthentication,
+  ProductController.ReadFinancialServiceFincode
+);
+
+router.post(
   "/readfinancialservices/:subproductid/:customerid",
   tokenAuthentication,
   ProductController.ReadFinancialService
 );
-
 router.post(
   "/readfinancialservices",
   tokenAuthentication,

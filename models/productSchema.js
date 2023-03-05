@@ -102,6 +102,10 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
+      Name: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
       SubProductId: {
         type: DataTypes.INTEGER,
         allowNull: false,

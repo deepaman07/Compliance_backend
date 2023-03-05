@@ -2,6 +2,7 @@ const { Joi } = require("celebrate");
 const FinancialServiceValidator = {
   insertFinancialServices_POST_Schema: Joi.object().keys({
     SubProductId: Joi.number().required(),
+    Name: Joi.string().required(),
     CustomerMobile: Joi.number().required(),
     CityId: Joi.number().required(),
     LoanAmount: Joi.number().required(),
