@@ -1,6 +1,7 @@
 const db = require("../models");
 var jwt = require("jsonwebtoken");
 var axios = require("axios");
+const { Op } = require("sequelize");
 //JWT secret key
 require("dotenv").config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -20,6 +21,7 @@ const FINCode = async function (req, res) {
       url: "https://pbpqaslimapi.policybazaar.com/getAffiliateIdByFinCode",
       headers: {
         "Content-Type": "application/json",
+        Auth: "lg25vFjRtp5TClTsz:&5CWhLyJe",
         Cookie:
           "_abck=D2C7D5EE3753CD8044C72B7080B6A6C9~-1YAAQ5u/IF/tjCjmGAQAAdcXYgwlyodPn3c2AOb7tQ4tjlObrIt7sqMf/Pej1E1P43SwO2EPPeR5fO8v6d/ds/0lflqo9FtP3UJDRjrAJb2ZDiDcxrmPCf9cWZFqMKGppLZ7QnlHm6J3BDjCsNpGtVIqnLKRZQSsZHlcGvAyo0FexBA0hy8Pvd92iXKN+NfRV8uXbqgZOHfWFOnOTRiFMqJGEXBGacC6SzYPJG9mRprhe7yoKgFLL61El4BLy8HMzec0lJeuqa7vRQzyMuxXfR5UR7HdJqfiXjLzH/8usqG+nMXYt5vmeCcz80L+SVNinYLmRh6aa/+TiMfaJrFQnELTAGFQbQ6bEnqmxJwHeUDwn/8Gh3i7i6qtz8MK5nsI=-1~-1~-1",
       },
@@ -50,11 +52,23 @@ const Register = async (req, res) => {
   };
   try {
     const token = await Token.create(info);
+    const lastLogin = await Token.max("CreatedAt", {
+      where: {
+        FINCode: req.body.FINCode,
+        CreatedAt: {
+          [Op.lt]: Date().slice(4, 24),
+        },
+      },
+    });
     // res.cookie("userCookie", "aman", {
     //   httpOnly: false,
     // });
     // res.send(req.cookies);
-    if (token) res.status(200).send(token);
+    const result = {
+      token: token,
+      lastLogin: lastLogin,
+    };
+    if (token) res.status(200).send(result);
   } catch (error) {
     throw error;
   }
