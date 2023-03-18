@@ -47,8 +47,8 @@ const Register = async (req, res) => {
     MobileNumber: req.body.MobileNumber,
     Token: jwtToken,
     IsActive: 1,
-    CreatedAt: Date(),
-    UpdatedAt: Date(),
+    CreatedAt: Date().slice(4, 24),
+    UpdatedAt: Date().slice(4, 24),
   };
   try {
     const token = await Token.create(info);
@@ -78,7 +78,7 @@ const Register = async (req, res) => {
 
 const Logout = async (req, res) => {
   const logout = await Token.update(
-    { IsActive: 0, UpdatedAt: Date() },
+    { IsActive: 0, UpdatedAt: Date().slice(4, 24) },
     { where: { Id: req.params.id } }
   );
   res.status(200).send("logout");
