@@ -29,13 +29,24 @@ const ReadSubProducts = async (req, res) => {
 
 const ReadFinancialService = async (req, res) => {
   try {
-    const financialService = await FinancialService.findAll({
-      where: {
-        SubProductId: req.params.subproductid,
-        FINCode: req.params.customerid,
-      },
-      order: [["Id", "DESC"]],
-    });
+    const financialService = await ProductSchema.sequelize.query(
+      "SELECT * from pbpasidb.leaddetails WHERE YEAR(CreatedAt) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(CreatedAt) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND SubProductId = (:SubProductId) AND FINCode = (:FINCode)",
+      {
+        replacements: {
+          SubProductId: req.params.subproductid,
+          FINCode: req.params.customerid,
+        },
+        type: ProductSchema.sequelize.QueryTypes.SELECT,
+      }
+    );
+    // const financialService = await FinancialService.findAll({
+    //   where: {
+    //     SubProductId: req.params.subproductid,
+    //     FINCode: req.params.customerid,
+    //   },
+    //   order: [["Id", "DESC"]],
+    // });
+    console.log(financialService);
     res.status(200).send(financialService);
   } catch (error) {
     throw error;
@@ -43,12 +54,15 @@ const ReadFinancialService = async (req, res) => {
 };
 const ReadFinancialServiceFincode = async (req, res) => {
   try {
-    const financialService = await FinancialService.findAll({
-      where: {
-        FINCode: req.params.customerid,
-      },
-      order: [["Id", "DESC"]],
-    });
+    const financialService = await ProductSchema.sequelize.query(
+      "SELECT * from pbpasidb.leaddetails WHERE YEAR(CreatedAt) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(CreatedAt) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND FINCode = (:FINCode) ORDER BY Id DESC",
+      {
+        replacements: {
+          FINCode: req.params.customerid,
+        },
+        type: ProductSchema.sequelize.QueryTypes.SELECT,
+      }
+    );
     res.status(200).send(financialService);
   } catch (error) {
     throw error;
@@ -56,9 +70,12 @@ const ReadFinancialServiceFincode = async (req, res) => {
 };
 const ReadFinancialServiceAll = async (req, res) => {
   try {
-    const financialService = await FinancialService.findAll({
-      order: [["Id", "DESC"]],
-    });
+    const financialService = await ProductSchema.sequelize.query(
+      "SELECT * from pbpasidb.leaddetails WHERE YEAR(CreatedAt) = YEAR(CURDATE() - INTERVAL 1 MONTH) AND MONTH(CreatedAt) = MONTH(CURDATE() - INTERVAL 1 MONTH) ORDER BY Id DESC",
+      {
+        type: ProductSchema.sequelize.QueryTypes.SELECT,
+      }
+    );
     res.status(200).send(financialService);
   } catch (error) {
     throw error;
@@ -91,23 +108,16 @@ const InsertFinancialService = async (req, res) => {
 const Dashboard = async (req, res) => {
   try {
     const finCode = req.body.FINCode;
-    const startDate = new Date("2022-04-01 00:00:00");
-    const endDate = new Date("2023-04-01 00:00:00");
-    FinancialService.findAll({
-      attributes: [
-        [literal("COUNT(*)"), "TotalRecords"],
-        [literal("YEAR(CreatedAt)"), "Year"],
-        [literal("MONTH(CreatedAt)"), "Month"],
-      ],
-      where: {
-        FINCode: finCode,
-        createdAt: {
-          [Op.gte]: startDate,
-          [Op.lt]: endDate,
-        },
-      },
-      group: ["Year", "Month"],
-    })
+    await ProductSchema.sequelize
+      .query(
+        "SELECT Nop as TotalRecords, Month FROM pbpasidb.provisions where FinanceCode = (:FINCode)",
+        {
+          replacements: {
+            FINCode: finCode,
+          },
+          type: ProductSchema.sequelize.QueryTypes.SELECT,
+        }
+      )
       .then((result) => {
         res.status(200).send(result);
       })
@@ -138,22 +148,14 @@ const Dashboard = async (req, res) => {
 };
 const DashboardAll = async (req, res) => {
   try {
-    const startDate = new Date("2022-04-01 00:00:00");
-    const endDate = new Date("2023-04-01 00:00:00");
-    FinancialService.findAll({
-      attributes: [
-        [literal("COUNT(*)"), "TotalRecords"],
-        [literal("YEAR(CreatedAt)"), "Year"],
-        [literal("MONTH(CreatedAt)"), "Month"],
-      ],
-      where: {
-        createdAt: {
-          [Op.gte]: startDate,
-          [Op.lt]: endDate,
-        },
-      },
-      group: ["Year", "Month"],
-    })
+    const finCode = req.body.FINCode;
+    await ProductSchema.sequelize
+      .query(
+        "SELECT count(Nop) as TotalRecords, Month FROM pbpasidb.provisions group by Month",
+        {
+          type: ProductSchema.sequelize.QueryTypes.SELECT,
+        }
+      )
       .then((result) => {
         res.status(200).send(result);
       })

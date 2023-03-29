@@ -36,7 +36,15 @@ router.post(
   celebrate({ body: ProductValidator.insertFinancialServices_POST_Schema }),
   ProductController.InsertFinancialService
 );
-router.post("/dashboard", tokenAuthentication, ProductController.Dashboard);
-router.post("/dashboardall", tokenAuthentication, ProductController.DashboardAll);
+router.post(
+  "/dashboard",
+  tokenAuthentication,
+  ProductController.Dashboard
+);
+router.post(
+  "/dashboardall",
+  tokenAuthentication,
+  ProductController.DashboardAll
+);
 
 module.exports = router;

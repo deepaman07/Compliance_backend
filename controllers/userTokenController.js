@@ -18,7 +18,7 @@ const FINCode = async function (req, res) {
 
     var config = {
       method: "post",
-      url: "https://pbpqaslimapi.policybazaar.com/getAffiliateIdByFinCode",
+      url: `${process.env.FINCODEURL}/getAffiliateIdByFinCode`,
       headers: {
         "Content-Type": "application/json",
         Auth: "lg25vFjRtp5TClTsz:&5CWhLyJe",
@@ -47,8 +47,8 @@ const Register = async (req, res) => {
     MobileNumber: req.body.MobileNumber,
     Token: jwtToken,
     IsActive: 1,
-    CreatedAt: Date().slice(4, 24),
-    UpdatedAt: Date().slice(4, 24),
+    CreatedAt: Date(),
+    UpdatedAt: Date(),
   };
   try {
     const token = await Token.create(info);
@@ -56,14 +56,10 @@ const Register = async (req, res) => {
       where: {
         FINCode: req.body.FINCode,
         CreatedAt: {
-          [Op.lt]: Date().slice(4, 24),
+          [Op.lt]: Date(),
         },
       },
     });
-    // res.cookie("userCookie", "aman", {
-    //   httpOnly: false,
-    // });
-    // res.send(req.cookies);
     const result = {
       token: token,
       lastLogin: lastLogin,
@@ -78,7 +74,7 @@ const Register = async (req, res) => {
 
 const Logout = async (req, res) => {
   const logout = await Token.update(
-    { IsActive: 0, UpdatedAt: Date().slice(4, 24) },
+    { IsActive: 0, UpdatedAt: Date() },
     { where: { Id: req.params.id } }
   );
   res.status(200).send("logout");
