@@ -39,13 +39,6 @@ const ReadFinancialService = async (req, res) => {
         type: ProductSchema.sequelize.QueryTypes.SELECT,
       }
     );
-    // const financialService = await FinancialService.findAll({
-    //   where: {
-    //     SubProductId: req.params.subproductid,
-    //     FINCode: req.params.customerid,
-    //   },
-    //   order: [["Id", "DESC"]],
-    // });
     console.log(financialService);
     res.status(200).send(financialService);
   } catch (error) {
@@ -124,23 +117,6 @@ const Dashboard = async (req, res) => {
       .catch((error) => {
         console.error(error);
       });
-    // await FinancialService.count({
-    //   where: {
-    //     FINCode: finCode,
-    //     createdAt: {
-    //       [Op.gte]: startDate,
-    //       [Op.lt]: endDate,
-    //     },
-    //   },
-    // })
-    //   .then((count) => {
-    //     console.log(`Total records: ${count}`);
-    //     res.status(200).send({"Count":count});
-    //   })
-    //   .catch((error) => {
-    //     res.status(400);
-    //     console.error(error);
-    //   });
     res.status(400);
   } catch (error) {
     throw error;
