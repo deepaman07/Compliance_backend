@@ -110,7 +110,7 @@ const Dashboard = async (req, res) => {
     const finCode = req.body.FINCode;
     await ProductSchema.sequelize
       .query(
-        "SELECT Nop as TotalRecords, Month FROM pbpasidb.provisions where FinanceCode = (:FINCode)",
+        "SELECT sum(Nop) as TotalRecords, Month, monthid FROM pbpasidb.provisions WHERE FinanceCode = (:FINCode) GROUP BY monthid, Month ORDER BY monthid",
         {
           replacements: {
             FINCode: finCode,
@@ -151,7 +151,7 @@ const DashboardAll = async (req, res) => {
     const finCode = req.body.FINCode;
     await ProductSchema.sequelize
       .query(
-        "SELECT count(Nop) as TotalRecords, Month FROM pbpasidb.provisions group by Month",
+        "SELECT sum(Nop) as TotalRecords, Month, monthid FROM pbpasidb.provisions GROUP BY monthid, Month ORDER BY monthid",
         {
           type: ProductSchema.sequelize.QueryTypes.SELECT,
         }
