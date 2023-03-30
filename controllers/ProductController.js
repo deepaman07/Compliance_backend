@@ -110,7 +110,7 @@ const Dashboard = async (req, res) => {
     const finCode = req.body.FINCode;
     await ProductSchema.sequelize
       .query(
-        "SELECT sum(Nop) as TotalRecords, Month, monthid FROM pbpasidb.provisions WHERE FinanceCode = (:FINCode) GROUP BY monthid, Month ORDER BY monthid",
+        "SELECT ifnull(sum(Nop), 0) as TotalRecords, case WHEN ifnull(MONTH, 0) = 0 Then TMname ELSE MONTH END AS Month, TMonthid as Numbering FROM pbpasidb.tbl_Index left JOIN pbpasidb.provisions on monthid = TMonthid and provisions.FinanceCode = (:FINCode) GROUP BY TMonthid, case WHEN ifnull(MONTH, 0) = 0 Then TMname ELSE MONTH END ORDER BY TMonthid",
         {
           replacements: {
             FINCode: finCode,
@@ -151,7 +151,7 @@ const DashboardAll = async (req, res) => {
     const finCode = req.body.FINCode;
     await ProductSchema.sequelize
       .query(
-        "SELECT sum(Nop) as TotalRecords, Month, monthid FROM pbpasidb.provisions GROUP BY monthid, Month ORDER BY monthid",
+        "SELECT ifnull(sum(Nop), 0) as TotalRecords, case WHEN ifnull(MONTH, 0) = 0 Then TMname ELSE MONTH END AS Month, TMonthid FROM pbpasidb.tbl_Index left JOIN pbpasidb.provisions on monthid = TMonthid GROUP BY TMonthid, case WHEN ifnull(MONTH, 0) = 0 Then TMname ELSE MONTH END ORDER BY TMonthid",
         {
           type: ProductSchema.sequelize.QueryTypes.SELECT,
         }
